@@ -1,0 +1,98 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Webp Wasm\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-06-04 10:02+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.4.0; wp-5.4.1"
+
+#: main.html.php:7
+msgid "Create"
+msgstr ""
+
+#: main.html.php:8
+msgid "Delete"
+msgstr ""
+
+#: main.html.php:11
+msgid "The WebP WASM plugin is active but cannot be used in this browser."
+msgstr ""
+
+#: main.html.php:17
+msgid "Generate"
+msgstr ""
+
+#: main.html.php:20 main.html.php:22 main.html.php:54 main.html.php:56
+msgid "Click"
+msgstr ""
+
+#: main.html.php:20
+msgid ""
+"to create WebP images for this image and its thumbnails. This could take a "
+"while."
+msgstr ""
+
+#: main.html.php:22
+msgid ""
+"to create WebP images for all media library images and their thumbnails. "
+"This could take a while."
+msgstr ""
+
+#: main.html.php:26
+msgid "Settings"
+msgstr ""
+
+#: main.html.php:29
+msgid "WebP Image Quality"
+msgstr ""
+
+#: main.html.php:36
+msgid "Overwrite existing WebP files"
+msgstr ""
+
+#: main.html.php:41
+msgid ""
+"Notice: Since images are converted on the client and then sent to the server,"
+" be mindful not to use a connection with limited data."
+msgstr ""
+
+#: main.html.php:51
+msgid "Restore"
+msgstr ""
+
+#: main.html.php:54
+msgid ""
+"to delete all WebP images for this image and its thumbnails. This will leave "
+"originals unchanged (JPEG and PNG)."
+msgstr ""
+
+#: main.html.php:56
+msgid ""
+"to delete all WebP images for all media library images and their thumbnails. "
+"This will leave originals unchanged (JPEG and PNG)."
+msgstr ""
+
+#. Name of the plugin
+msgid "WebP WASM"
+msgstr ""
+
+#. Description of the plugin
+msgid "Client side JPEG and PNG conversions to webp and upload."
+msgstr ""
+
+#. URI of the plugin
+msgid "https://github.com/wrburnham/wp-webp-wasm"
+msgstr ""
+
+#. Author of the plugin
+msgid "wrburnham"
+msgstr ""

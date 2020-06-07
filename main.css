@@ -1,0 +1,69 @@
+#ww_panel {
+    padding: 15px 0;
+}
+
+#ww_panel h1 {
+    margin-bottom: 30px;
+}
+
+#ww_panel hr {
+    margin: 10px 0;
+}
+
+.ww--hidden {
+	display: none;
+}
+.ww--not-supported {
+	color: red;
+}
+
+.ww_notice {
+    color: orangered;
+}
+
+.ww_panel_quality {
+    width: 70px;
+}
+
+.ww_generate_section, .ww_restore_section, #ww_log {
+    background-color: white;
+    border-radius: 4px;
+    padding: 10px 15px 15px;
+}
+
+/* Generate section */
+.ww_generate_section_title {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.wp-core-ui .ww_button_generate {
+    font-size: 18px;
+    margin-top: 20px;
+    padding: 5px 20px;
+    transition: all 250ms;
+}
+
+.ww_settings_section {
+    padding: 10px 0;
+}
+
+.ww_generate_section h3 {
+    font-size: 14px;
+}
+
+/* Restore section*/
+.ww_restore_section_title {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.wp-core-ui .ww_button_delete {
+    margin-top: 10px;
+    transition: all 250ms;
+}
+
+/* List */
+#ww_log li.completed {
+    color: darkgreen;
+}
