@@ -67,3 +67,7 @@
 #ww_log li.completed {
     color: darkgreen;
 }
+
+#ww_log:empty {
+    display: none;
+}
