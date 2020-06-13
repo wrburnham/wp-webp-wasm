@@ -54,7 +54,7 @@ function ww_admin_menu() {
 }
 
 function ww_render_admin_menu() {
-    $postId = 0;
+    $post_id = 0;
     include(__DIR__ . DIRECTORY_SEPARATOR . "main.html.php");
 }
 
@@ -62,7 +62,7 @@ function ww_render_edit_form_ui($post) {
     if (ww_is_valid($post) === false) {
         return;
     }
-    $postId = $post->ID;
+    $post_id = $post->ID;
     include(__DIR__ . DIRECTORY_SEPARATOR . "main.html.php");
 }
 
@@ -85,8 +85,8 @@ function ww_render_post($content) {
 }
 
 function ww_webp_src($src) {
-    $webpPath = get_webp_image_file_path($src);                
-    if (file_exists($webpPath)) {
+    $webp_path = get_webp_image_file_path($src);
+    if (file_exists($webp_path)) {
         $src = ww_get_webp_name($src);
     }
     return $src;
@@ -94,8 +94,8 @@ function ww_webp_src($src) {
 
 function ww_webp_srcset($srcset) {
     foreach (ww_get_srcset_images($srcset) as $src) {
-        $ssWebpPath = get_webp_image_file_path($src);
-        if (file_exists($ssWebpPath)) {
+        $ss_webp_path = get_webp_image_file_path($src);
+        if (file_exists($ss_webp_path)) {
             $srcset = str_replace($src, ww_get_webp_name($src), $srcset);
         }
     }
@@ -150,22 +150,22 @@ function ww_css_registry() {
     );
 }
 
-function ww_webp_all_media($postId = 0) {
+function ww_webp_all_media($post_id = 0) {
     $args = array(
         "post_type"      => "attachment",
         "post_mime_type" => "image/jpeg,image/jpg,image/png",
         "post_status"    => "inherit",
         "posts_per_page" => -1,
     );
-    if ($postId > 0) {
-        $args["post__in"] = array($postId);
+    if ($post_id > 0) {
+        $args["post__in"] = array($post_id);
     }
     $posts = new WP_Query($args);
     return $posts;
 }
 
-function ww_is_valid_post_id($postId) {
-    return ((int) $postId) >= 0;
+function ww_is_valid_post_id($post_id) {
+    return ((int) $post_id) >= 0;
 }
 
 function ww_webp_fetch_images() {
@@ -182,20 +182,20 @@ function ww_webp_fetch_images() {
             $results = array();
             $results["total"] = 0;
             foreach ($posts->posts as $post) {
-                $postFiles = array();
+                $post_files = array();
                 $images = ww_get_images($post);
                 $baseurl = $images["baseurl"];
                 foreach ($images["files"] as $file) {
                     $source = $baseurl . "/" . $file;
                     if ($data["overwrite"] === "true" || !file_exists(ww_get_dest_path($post, $source))) {
-                        $postFiles[] = $file;
+                        $post_files[] = $file;
                     }
                 }
-                $total = (int) sizeof($postFiles);
+                $total = (int) sizeof($post_files);
                 if ($total > 0) {
                     $results[$post->ID]["baseurl"] = $baseurl;
                     $results["total"] += $total;
-                    $results[$post->ID]["files"] = $postFiles;
+                    $results[$post->ID]["files"] = $post_files;
                 }
             }
             echo json_encode($results);
@@ -243,8 +243,8 @@ function ww_webp_delete_all() {
 function ww_get_images($post) {
     $meta = get_post_meta($post->ID, "_wp_attachment_metadata", true);
     $results = array();
-    $uploadDir = ww_get_upload_dir($post);
-    $baseurl = $uploadDir["url"];
+    $upload_dir = ww_get_upload_dir($post);
+    $baseurl = $upload_dir["url"];
     $basefile = substr($post->guid, strlen($baseurl . "/"));
     $files = array($basefile);
     if (isset($meta["sizes"])) {
@@ -291,18 +291,18 @@ function ww_get_upload_dir($post) {
 }
 
 function ww_get_dest_path($post, $guid = null) {
-    $uploadDir = ww_get_upload_dir($post);
+    $upload_dir = ww_get_upload_dir($post);
     if ($guid === null) {
         $guid = $post->guid;
     }
-    $origFilename = wp_basename($guid);
-    $filename = ww_get_webp_name($origFilename);
-    $destPath = $uploadDir["path"] . DIRECTORY_SEPARATOR . $filename;
+    $orig_filename = wp_basename($guid);
+    $filename = ww_get_webp_name($orig_filename);
+    $destPath = $upload_dir["path"] . DIRECTORY_SEPARATOR . $filename;
     return $destPath;
 }
 
-function ww_get_webp_name($origFilename) {
-    return substr($origFilename, 0, strrpos($origFilename, ".")) . ".webp";
+function ww_get_webp_name($orig_filename) {
+    return substr($orig_filename, 0, strrpos($orig_filename, ".")) . ".webp";
 }
 
 /**
@@ -320,11 +320,11 @@ function ww_is_valid($post) {
 }
 
 function ww_init_resources() {
-    $webpJsHandle = "ww-webp-js";
-    $mainJsHandle = "ww-main-js";
+    $webp_js_handle = "ww-webp-js";
+    $main_js_handle = "ww-main-js";
     // enqueue webp.js
     wp_enqueue_script(
-        $webpJsHandle,
+        $webp_js_handle,
         plugin_dir_url(__FILE__) . "/webp.js", 
         array(), 
         __WW_VERSION__, 
@@ -332,14 +332,14 @@ function ww_init_resources() {
     
     // enqueue js
     wp_enqueue_script(
-        $mainJsHandle,
+        $main_js_handle,
         plugin_dir_url(__FILE__) . "/main.js", 
-        array("jquery", $webpJsHandle), 
+        array("jquery", $webp_js_handle),
         __WW_VERSION__, 
         true);
 
     wp_localize_script(
-        $mainJsHandle,
+        $main_js_handle,
         "wwAjax", 
         array(
             "url" => admin_url("admin-ajax.php"),
