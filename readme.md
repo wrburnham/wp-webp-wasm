@@ -20,8 +20,8 @@ This plugin is a work in progress.
 
 - Navigate to **Plugins** 
 - Set the quality and overwrite flag as desired
-- Click **Create All** to create webp files for all media library images
-- Click **Delete All** to delete existing webp files for all media library images
+- Click **Create** to create webp files for all media library images
+- Click **Delete** to delete existing webp files for all media library images
 
 ## How it works
 
@@ -42,3 +42,12 @@ A filter is applied in the WordPress hook `the_content` to swap an image for its
 ## More about the conversion
 
 Conversion is done on the client, so a modern browser with wasm support is needed. This is because conversion to webp with php requires shell_exec to make calls to Google's cwebp or other php extensions are needed. These features often pose security risks that outweigh the benefits. This plugin gets around that by delegating the actual image conversion to the client. It's based on [this encoder](https://github.com/wrburnham/webp-wasm) to save webp versions of uploaded jpeg and png images.
+
+## License
+
+This plugin is licensed as GPLv3.
+
+### Licenso notes
+
+The simple html dom parser library is used to render webp images directly in WordPress content where possible. This library, distributed in the plugin code, is licensed under the MIT license.
+The client-side conversion to WebP leverages Google's libwebp. Please see the main.php header for details specific to these two pieces of software that are integrated in this plugin.
