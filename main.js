@@ -68,8 +68,8 @@ jQuery(document).ready(function() {
                         data: {
                             action: "ww_webp_fetch_images",
                             overwrite: isOverwrite,
-                            wwNonce: wwAjax.nonce,
-                            postId: curPostId
+                            ww_nonce: wwAjax.nonce,
+                            post_id: curPostId
                         },
                     }).done(function(data) {
                         const Progress = {
@@ -150,8 +150,8 @@ jQuery(document).ready(function() {
                         url: wwAjax.url,
                         data: {
                             action: "ww_webp_delete_all",
-                            wwNonce: wwAjax.nonce,
-                            postId: curPostId
+                            ww_nonce: wwAjax.nonce,
+                            post_id: curPostId
                         },
                         dataType: "json"
                     }).done(function(data) {
@@ -216,11 +216,11 @@ jQuery(document).ready(function() {
                     wwEncode(Module, image, quality, result => {
                         let blob = new Blob([result], {type: "image/webp"});
                         let fd = new FormData();
-                        fd.append("postId", postId);
+                        fd.append("post_id", postId);
                         fd.append("src", src);
                         fd.append("webp", blob);
                         fd.append("action", "ww_webp_upload");
-                        fd.append("wwNonce", wwAjax.nonce);
+                        fd.append("ww_nonce", wwAjax.nonce);
                         jQuery.ajax({
                             type: "POST",
                             method: "POST",

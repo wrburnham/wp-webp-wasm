@@ -47,7 +47,7 @@ add_filter("the_content", "ww_render_post", 9999);
 
 const __WW_VERSION__ = "1.0";
 const __WW_CSS_HANDLE__ = "ww_css";
-const __NONCE_KEY__ = "wwNonce";
+const __NONCE_KEY__ = "ww_nonce";
 
 function ww_admin_menu() {
     add_management_page(
@@ -179,12 +179,12 @@ function ww_webp_fetch_images() {
         $data = isset( $_POST ) ? $_POST : array();
         if (!isset($data[__NONCE_KEY__])
             || !isset($data["overwrite"])
-            || !isset($data["postId"])
-            || !ww_is_valid_post_id($data["postId"])
+            || !isset($data["post_id"])
+            || !ww_is_valid_post_id($data["post_id"])
             || !wp_verify_nonce($data[__NONCE_KEY__], __NONCE_KEY__)) {
             http_response_code(400);
         } else {
-            $posts = ww_webp_all_media((int) $data["postId"]);
+            $posts = ww_webp_all_media((int) $data["post_id"]);
             $results = array();
             $results["total"] = 0;
             foreach ($posts->posts as $post) {
@@ -218,13 +218,13 @@ function ww_webp_delete_all() {
         $data = isset( $_POST ) ? $_POST : array();
     
         if (!isset($data[__NONCE_KEY__]) 
-            || !isset($data["postId"])
-            || !ww_is_valid_post_id($data["postId"])
+            || !isset($data["post_id"])
+            || !ww_is_valid_post_id($data["post_id"])
             || !wp_verify_nonce($data[__NONCE_KEY__], __NONCE_KEY__)) {
             http_response_code(400);
         } else {
             $results = array();
-            $posts = ww_webp_all_media((int) $data["postId"]);
+            $posts = ww_webp_all_media((int) $data["post_id"]);
             foreach ($posts->posts as $post) {
                 $images = ww_get_images($post);
                 $baseurl = $images["baseurl"];
@@ -270,14 +270,14 @@ function ww_webp_upload() {
         $file_data = isset( $_FILES ) ? $_FILES : array();
         $data = array_merge( $posted_data, $file_data );
 
-        if (!isset($data["postId"]) 
+        if (!isset($data["post_id"])
             || !isset($data["webp"]) 
             || !isset($data["src"])
             || !isset($data[__NONCE_KEY__])
             || !wp_verify_nonce($data[__NONCE_KEY__], __NONCE_KEY__)) {
             http_response_code(400);
         } else {
-            $post = get_post($data["postId"]);
+            $post = get_post($data["post_id"]);
             $src = $data["src"];
             $dest = ww_get_dest_path($post, $src);
             move_uploaded_file($data["webp"]["tmp_name"], $dest);
