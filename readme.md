@@ -1,6 +1,4 @@
-# WebP Wasm
-
-This plugin is a work in progress.
+# WebP WASM
 
 ## Quick start
 
