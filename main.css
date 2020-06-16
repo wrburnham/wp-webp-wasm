@@ -1,73 +1,73 @@
-#ww_panel {
+#webpwasm_panel {
     padding: 15px 0;
 }
 
-#ww_panel h1 {
+#webpwasm_panel h1 {
     margin-bottom: 30px;
 }
 
-#ww_panel hr {
+#webpwasm_panel hr {
     margin: 10px 0;
 }
 
-.ww--hidden {
+.webpwasm--hidden {
 	display: none;
 }
-.ww--not-supported {
+.webpwasm--not-supported {
 	color: red;
 }
 
-.ww_notice {
+.webpwasm_notice {
     color: orangered;
 }
 
-.ww_panel_quality {
+.webpwasm_panel_quality {
     width: 70px;
 }
 
-.ww_generate_section, .ww_restore_section, #ww_log {
+.webpwasm_generate_section, .webpwasm_restore_section, #webpwasm_log {
     background-color: white;
     border-radius: 4px;
     padding: 10px 15px 15px;
 }
 
 /* Generate section */
-.ww_generate_section_title {
+.webpwasm_generate_section_title {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
 
-.wp-core-ui .ww_button_generate {
+.wp-core-ui .webpwasm_button_generate {
     font-size: 18px;
     margin-top: 20px;
     padding: 5px 20px;
     transition: all 250ms;
 }
 
-.ww_settings_section {
+.webpwasm_settings_section {
     padding: 10px 0;
 }
 
-.ww_generate_section h3 {
+.webpwasm_generate_section h3 {
     font-size: 14px;
 }
 
 /* Restore section*/
-.ww_restore_section_title {
+.webpwasm_restore_section_title {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
 
-.wp-core-ui .ww_button_delete {
+.wp-core-ui .webpwasm_button_delete {
     margin-top: 10px;
     transition: all 250ms;
 }
 
 /* List */
-#ww_log li.completed {
+#webpwasm_log li.completed {
     color: darkgreen;
 }
 
-#ww_log:empty {
+#webpwasm_log:empty {
     display: none;
 }

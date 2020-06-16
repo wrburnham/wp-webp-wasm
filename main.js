@@ -1,6 +1,6 @@
 jQuery(document).ready(function() {
     const webpPage = function() {
-        return jQuery(".ww").length;
+        return jQuery(".webpwasm").length;
     }
 
     if (!webpPage()) {
@@ -16,14 +16,14 @@ jQuery(document).ready(function() {
         };
 
         const PluginPanelView = {
-            panel: jQuery("#ww_panel"),
-            btnConvertAll: jQuery("#ww_panel_action"),
-            notSuported: jQuery(".ww--not-supported"),
-            allCtrlEl: jQuery(".ww"),
-            logText: jQuery("#ww_log"),
-            overwriteExisting: jQuery("#ww_panel_overwrite"),
-            txtQuality: jQuery("#ww_panel_quality"),
-            btnDeleteAll: jQuery("#ww_panel_delete"),
+            panel: jQuery("#webpwasm_panel"),
+            btnConvertAll: jQuery("#webpwasm_panel_action"),
+            notSuported: jQuery(".webpwasm--not-supported"),
+            allCtrlEl: jQuery(".webpwasm"),
+            logText: jQuery("#webpwasm_log"),
+            overwriteExisting: jQuery("#webpwasm_panel_overwrite"),
+            txtQuality: jQuery("#webpwasm_panel_quality"),
+            btnDeleteAll: jQuery("#webpwasm_panel_delete"),
             enable: function() {
                 setViewDisabled(this.allCtrlEl, false);
             },
@@ -54,21 +54,21 @@ jQuery(document).ready(function() {
                 PluginPanelView.clearLog();
                 let qty = PluginPanelModel.quality();
                 if (!isValidQuality(qty)) {
-                    wwLog("Quality must be between 1 and 100, cannot convert");
+                    webpwasmLog("Quality must be between 1 and 100, cannot convert");
                     PluginPanelView.enable();
                 } else {
                     let isOverwrite = PluginPanelModel.isOverwrite();
                     let curPostId = PluginPanelModel.postId();
-                    wwLog("Fetching list of images");
+                    webpwasmLog("Fetching list of images");
                     jQuery.ajax({
                         type: "POST",
                         method: "POST",
-                        url: wwAjax.url,
+                        url: webpwasmAjax.url,
                         dataType: "json",
                         data: {
-                            action: "ww_webp_fetch_images",
+                            action: "webpwasm_webp_fetch_images",
                             overwrite: isOverwrite,
-                            ww_nonce: wwAjax.nonce,
+                            webpwasm_nonce: webpwasmAjax.nonce,
                             post_id: curPostId
                         },
                     }).done(function(data) {
@@ -79,17 +79,17 @@ jQuery(document).ready(function() {
                             convertImgSuccess: 0,
                             handleLoadImgFail: function(value) {
                                 this.loadImgFail++;
-                                wwLog(this.progress() + ": " + value + " - Could not load image");
+                                webpwasmLog(this.progress() + ": " + value + " - Could not load image");
                                 this.enableIfFinished();
                             },
                             handleConvertImgFail: function(value) {
                                 this.convertImgFail++;
-                                wwLog(this.progress() + ": " + value + " - An error occurred and the webp image may not have been created or updated");
+                                webpwasmLog(this.progress() + ": " + value + " - An error occurred and the webp image may not have been created or updated");
                                 this.enableIfFinished();
                             },
                             handleConvertImgSuccess: function(value) {
                                 this.convertImgSuccess++;
-                                wwLog(this.progress() + ": " + value + " - OK");
+                                webpwasmLog(this.progress() + ": " + value + " - OK");
                                 this.enableIfFinished();
                             },
                             handled: function() {
@@ -100,16 +100,16 @@ jQuery(document).ready(function() {
                             },
                             enableIfFinished: function() {
                                 if (this.handled() === this.total) {
-                                    wwLog("Finished");
+                                    webpwasmLog("Finished");
                                     PluginPanelView.enable();
                                 }
                             }
                         };
-                        wwLog("Found " + Progress.total + " images");
+                        webpwasmLog("Found " + Progress.total + " images");
                         if (Progress.total === 0) {
                             PluginPanelView.enable();
                         } else {
-                            wwLog("Converting...");
+                            webpwasmLog("Converting...");
                             jQuery.each(data, function(postId, postImages) {
                                 jQuery.each(postImages.files, function(key, filename) {
                                     let value = postImages.baseurl + "/" + filename;
@@ -124,7 +124,7 @@ jQuery(document).ready(function() {
                             });
                         }
                     }).fail(function(data, text, xhr) {
-                        wwLog("Could not fetch images");
+                        webpwasmLog("Could not fetch images");
                         PluginPanelView.enable();
                     });
                 }
@@ -142,15 +142,15 @@ jQuery(document).ready(function() {
                 if (proceed == true) {
                     PluginPanelView.disable();
                     PluginPanelView.clearLog();
-                    wwLog("Deleting webp images...");
+                    webpwasmLog("Deleting webp images...");
                     jQuery.ajax({
                         type: "POST",
                         method: "POST",
                         dataType: "json",
-                        url: wwAjax.url,
+                        url: webpwasmAjax.url,
                         data: {
-                            action: "ww_webp_delete_all",
-                            ww_nonce: wwAjax.nonce,
+                            action: "webpwasm_webp_delete_all",
+                            webpwasm_nonce: webpwasmAjax.nonce,
                             post_id: curPostId
                         },
                         dataType: "json"
@@ -164,35 +164,35 @@ jQuery(document).ready(function() {
                             } else {
                                 msg += "ERROR";
                             }
-                            wwLog(msg);
+                            webpwasmLog(msg);
                         });
-                        wwLog("Deleted " + numDeleted + " images.");
+                        webpwasmLog("Deleted " + numDeleted + " images.");
                     }).fail(function(data, text, xhr) {
-                        wwLog("An error occurred and the WebP images may not have been deleted.");
+                        webpwasmLog("An error occurred and the WebP images may not have been deleted.");
                     });
                     PluginPanelView.enable();
                 }
             });
 
-            PluginPanelView.notSuported.addClass("ww--hidden");
-            PluginPanelView.panel.removeClass("ww--hidden");
+            PluginPanelView.notSuported.addClass("webpwasm--hidden");
+            PluginPanelView.panel.removeClass("webpwasm--hidden");
         };
 
         // TODO refactor
 
-        const wwSuccess = function(msg) {
+        const webpwasmSuccess = function(msg) {
             View.updateStatus(msg, 0, true);
         };
 
-        const wwError = function(msg) {
+        const webpwasmError = function(msg) {
             View.updateStatus(msg, 1, true);
         };
 
-        const wwInProgress = function(msg) {
+        const webpwasmInProgress = function(msg) {
             View.updateStatus(msg, 2, false);
         };
 
-        const wwLog = function(msg) {
+        const webpwasmLog = function(msg) {
             PluginPanelView.log(msg);
         };
 
@@ -213,18 +213,18 @@ jQuery(document).ready(function() {
                     ctx.drawImage(img, 0, 0);
                     const image = ctx.getImageData(0, 0, img.width, img.height);
                     delete canvas;
-                    wwEncode(Module, image, quality, result => {
+                    webpwasmEncode(Module, image, quality, result => {
                         let blob = new Blob([result], {type: "image/webp"});
                         let fd = new FormData();
                         fd.append("post_id", postId);
                         fd.append("src", src);
                         fd.append("webp", blob);
-                        fd.append("action", "ww_webp_upload");
-                        fd.append("ww_nonce", wwAjax.nonce);
+                        fd.append("action", "webpwasm_webp_upload");
+                        fd.append("webpwasm_nonce", webpwasmAjax.nonce);
                         jQuery.ajax({
                             type: "POST",
                             method: "POST",
-                            url: wwAjax.url,
+                            url: webpwasmAjax.url,
                             data: fd,
                             processData: false,
                             contentType: false
@@ -240,7 +240,7 @@ jQuery(document).ready(function() {
             delete img;
         }
 
-        function wwEncode(Module, image, quality, success) {
+        function webpwasmEncode(Module, image, quality, success) {
             const api = {
                 version: Module.cwrap('version', 'number', []),
                 create_buffer: Module.cwrap('create_buffer', 'number', ['number', 'number']),

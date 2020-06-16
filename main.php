@@ -36,53 +36,53 @@ if (!function_exists('add_action')) {
 }
 defined("ABSPATH") or die("No script kiddies please!");
 
-add_action("init", "ww_css_registry");
-add_action("wp_ajax_ww_webp_upload", "ww_webp_upload");
-add_action("wp_ajax_ww_webp_delete_all", "ww_webp_delete_all");
-add_action("wp_ajax_ww_webp_fetch_images", "ww_webp_fetch_images");
-add_action("admin_enqueue_scripts", "ww_init_resources");
-add_action("edit_form_advanced", "ww_render_edit_form_ui");
-add_action("admin_menu", "ww_admin_menu");
-add_filter("the_content", "ww_render_post", 9999);
+add_action("init", "webpwasm_css_registry");
+add_action("wp_ajax_webpwasm_webp_upload", "webpwasm_webp_upload");
+add_action("wp_ajax_webpwasm_webp_delete_all", "webpwasm_webp_delete_all");
+add_action("wp_ajax_webpwasm_webp_fetch_images", "webpwasm_webp_fetch_images");
+add_action("admin_enqueue_scripts", "webpwasm_init_resources");
+add_action("edit_form_advanced", "webpwasm_render_edit_form_ui");
+add_action("admin_menu", "webpwasm_admin_menu");
+add_filter("the_content", "webpwasm_render_post", 9999);
 
-const __WW_VERSION__ = "1.0";
-const __WW_CSS_HANDLE__ = "ww_css";
-const __NONCE_KEY__ = "ww_nonce";
+const WEBPWASM_VERSION__ = "1.0";
+const WEBPWASM_CSS_HANDLE__ = "webpwasm_css";
+const __NONCE_KEY__ = "webpwasm_nonce";
 
-function ww_admin_menu() {
+function webpwasm_admin_menu() {
     add_management_page(
         "WebP WASM Options",
         "WebP WASM",
         "manage_options",
-        "ww-options",
-        "ww_render_admin_menu"
+        "webpwasm-backoffice",
+        "webpwasm_render_admin_menu"
     );
 }
 
-function ww_render_admin_menu() {
+function webpwasm_render_admin_menu() {
     $post_id = 0;
     include(__DIR__ . DIRECTORY_SEPARATOR . "main.html.php");
 }
 
-function ww_render_edit_form_ui($post) {
-    if (ww_is_valid($post) === false) {
+function webpwasm_render_edit_form_ui($post) {
+    if (webpwasm_is_valid($post) === false) {
         return;
     }
     $post_id = $post->ID;
     include(__DIR__ . DIRECTORY_SEPARATOR . "main.html.php");
 }
 
-function ww_render_post($content) {
+function webpwasm_render_post($content) {
     if( in_the_loop() && strpos( $_SERVER['HTTP_ACCEPT'], 'image/webp' ) !== false ) {
         require_once(__DIR__ . DIRECTORY_SEPARATOR . "simple_html_dom.php");
         $html = str_get_html($content);
         if ($html !== false) {
             foreach ($html->find("img") as $el) {
-                $el->src = ww_webp_src($el->src);
-                $el->srcset = ww_webp_srcset($el->srcset);
+                $el->src = webpwasm_webp_src($el->src);
+                $el->srcset = webpwasm_webp_srcset($el->srcset);
             }
             foreach ($html->find("source") as $el) {
-                $el->srcset = ww_webp_srcset($el->srcset);
+                $el->srcset = webpwasm_webp_srcset($el->srcset);
             }
             return (string) $html;
         }
@@ -90,33 +90,33 @@ function ww_render_post($content) {
     return $content;
 }
 
-function ww_webp_src($src) {
+function webpwasm_webp_src($src) {
     $webp_path = get_webp_image_file_path($src);
     if (file_exists($webp_path)) {
-        $src = ww_get_webp_name($src);
+        $src = webpwasm_get_webp_name($src);
     }
     return $src;
 }
 
-function ww_webp_srcset($srcset) {
-    foreach (ww_get_srcset_images($srcset) as $src) {
+function webpwasm_webp_srcset($srcset) {
+    foreach (webpwasm_get_srcset_images($srcset) as $src) {
         $ss_webp_path = get_webp_image_file_path($src);
         if (file_exists($ss_webp_path)) {
-            $srcset = str_replace($src, ww_get_webp_name($src), $srcset);
+            $srcset = str_replace($src, webpwasm_get_webp_name($src), $srcset);
         }
     }
     return $srcset;
 }
 
-function ww_get_srcset_images($raw) {
+function webpwasm_get_srcset_images($raw) {
     $srcset_images = array();   
     foreach (explode(",", preg_replace("/\s+/", " ", $raw)) as $piece) {
-        $srcset_images[] = ww_get_srcset_url($piece);
+        $srcset_images[] = webpwasm_get_srcset_url($piece);
     }
     return $srcset_images;
 }
 
-function ww_get_srcset_url($raw) {
+function webpwasm_get_srcset_url($raw) {
     $tmp = ltrim($raw);
     $space_pos = strpos($tmp, " ");
     if ($space_pos !== false) {
@@ -143,20 +143,20 @@ function get_webp_image_file_path($src) {
     }
 
     $src = $dir["basedir"] . DIRECTORY_SEPARATOR . $src;
-    $src = ww_get_webp_name($src);
+    $src = webpwasm_get_webp_name($src);
     return $src;
 }
 
-function ww_css_registry() {
+function webpwasm_css_registry() {
     wp_register_style(
-        __WW_CSS_HANDLE__, 
+        WEBPWASM_CSS_HANDLE__,
         plugin_dir_url(__FILE__) . "/main.css",
         array(),
-        __WW_VERSION__
+        WEBPWASM_VERSION__
     );
 }
 
-function ww_webp_all_media($post_id = 0) {
+function webpwasm_webp_all_media($post_id = 0) {
     $args = array(
         "post_type"      => "attachment",
         "post_mime_type" => "image/jpeg,image/jpg,image/png",
@@ -170,30 +170,30 @@ function ww_webp_all_media($post_id = 0) {
     return $posts;
 }
 
-function ww_is_valid_post_id($post_id) {
+function webpwasm_is_valid_post_id($post_id) {
     return ((int) $post_id) >= 0;
 }
 
-function ww_webp_fetch_images() {
+function webpwasm_webp_fetch_images() {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $data = isset( $_POST ) ? $_POST : array();
         if (!isset($data[__NONCE_KEY__])
             || !isset($data["overwrite"])
             || !isset($data["post_id"])
-            || !ww_is_valid_post_id($data["post_id"])
+            || !webpwasm_is_valid_post_id($data["post_id"])
             || !wp_verify_nonce($data[__NONCE_KEY__], __NONCE_KEY__)) {
             http_response_code(400);
         } else {
-            $posts = ww_webp_all_media((int) $data["post_id"]);
+            $posts = webpwasm_webp_all_media((int) $data["post_id"]);
             $results = array();
             $results["total"] = 0;
             foreach ($posts->posts as $post) {
                 $post_files = array();
-                $images = ww_get_images($post);
+                $images = webpwasm_get_images($post);
                 $baseurl = $images["baseurl"];
                 foreach ($images["files"] as $file) {
                     $source = $baseurl . "/" . $file;
-                    if ($data["overwrite"] === "true" || !file_exists(ww_get_dest_path($post, $source))) {
+                    if ($data["overwrite"] === "true" || !file_exists(webpwasm_get_dest_path($post, $source))) {
                         $post_files[] = $file;
                     }
                 }
@@ -213,25 +213,25 @@ function ww_webp_fetch_images() {
     die();    
 }
 
-function ww_webp_delete_all() {
+function webpwasm_webp_delete_all() {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $data = isset( $_POST ) ? $_POST : array();
     
         if (!isset($data[__NONCE_KEY__]) 
             || !isset($data["post_id"])
-            || !ww_is_valid_post_id($data["post_id"])
+            || !webpwasm_is_valid_post_id($data["post_id"])
             || !wp_verify_nonce($data[__NONCE_KEY__], __NONCE_KEY__)) {
             http_response_code(400);
         } else {
             $results = array();
-            $posts = ww_webp_all_media((int) $data["post_id"]);
+            $posts = webpwasm_webp_all_media((int) $data["post_id"]);
             foreach ($posts->posts as $post) {
-                $images = ww_get_images($post);
+                $images = webpwasm_get_images($post);
                 $baseurl = $images["baseurl"];
                 foreach ($images["files"] as $file) {
                     $source = $baseurl . "/" . $file;
-                    $key = ww_get_webp_name($source);
-                    $dest = ww_get_dest_path($post, $source);
+                    $key = webpwasm_get_webp_name($source);
+                    $dest = webpwasm_get_dest_path($post, $source);
                     if (file_exists($dest)) {
                         $results[$key] = unlink($dest);
                     }
@@ -246,10 +246,10 @@ function ww_webp_delete_all() {
     die();
 }
 
-function ww_get_images($post) {
+function webpwasm_get_images($post) {
     $meta = get_post_meta($post->ID, "_wp_attachment_metadata", true);
     $results = array();
-    $upload_dir = ww_get_upload_dir($post);
+    $upload_dir = webpwasm_get_upload_dir($post);
     $baseurl = $upload_dir["url"];
     $basefile = substr($post->guid, strlen($baseurl . "/"));
     $files = array($basefile);
@@ -264,7 +264,7 @@ function ww_get_images($post) {
 }
 
 // see also https://www.ibenic.com/wordpress-file-upload-with-ajax/, https://wordpress.stackexchange.com/questions/231797/what-is-nonce-and-how-to-use-it-with-ajax-in-wordpress
-function ww_webp_upload() {
+function webpwasm_webp_upload() {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $posted_data = isset( $_POST ) ? $_POST : array();
         $file_data = isset( $_FILES ) ? $_FILES : array();
@@ -279,7 +279,7 @@ function ww_webp_upload() {
         } else {
             $post = get_post($data["post_id"]);
             $src = $data["src"];
-            $dest = ww_get_dest_path($post, $src);
+            $dest = webpwasm_get_dest_path($post, $src);
             move_uploaded_file($data["webp"]["tmp_name"], $dest);
             http_response_code(200);
         }
@@ -289,25 +289,25 @@ function ww_webp_upload() {
     die();
 }
 
-function ww_get_upload_dir($post) {
+function webpwasm_get_upload_dir($post) {
     $year = substr($post->post_date_gmt, 0, 4);
     $month = substr($post->post_date_gmt, 5, 2);
     $time = $year . "/" . $month;
     return wp_upload_dir($time, false);
 }
 
-function ww_get_dest_path($post, $guid = null) {
-    $upload_dir = ww_get_upload_dir($post);
+function webpwasm_get_dest_path($post, $guid = null) {
+    $upload_dir = webpwasm_get_upload_dir($post);
     if ($guid === null) {
         $guid = $post->guid;
     }
     $orig_filename = wp_basename($guid);
-    $filename = ww_get_webp_name($orig_filename);
+    $filename = webpwasm_get_webp_name($orig_filename);
     $destPath = $upload_dir["path"] . DIRECTORY_SEPARATOR . $filename;
     return $destPath;
 }
 
-function ww_get_webp_name($orig_filename) {
+function webpwasm_get_webp_name($orig_filename) {
     return substr($orig_filename, 0, strrpos($orig_filename, ".")) . ".webp";
 }
 
@@ -315,7 +315,7 @@ function ww_get_webp_name($orig_filename) {
  * Check if the post is valid for the plugin.
  * @return TRUE if the post is an attachment and is either jpeg or png, FALSE otherwise.
  */
-function ww_is_valid($post) {
+function webpwasm_is_valid($post) {
     if ($post->post_type !== "attachment") {
         return false;
     }
@@ -325,15 +325,15 @@ function ww_is_valid($post) {
     return false;
 }
 
-function ww_init_resources() {
-    $webp_js_handle = "ww-webp-js";
-    $main_js_handle = "ww-main-js";
+function webpwasm_init_resources() {
+    $webp_js_handle = "webpwasm-webp-js";
+    $main_js_handle = "webpwasm-main-js";
     // enqueue webp.js
     wp_enqueue_script(
         $webp_js_handle,
         plugin_dir_url(__FILE__) . "/webp.js", 
         array(), 
-        __WW_VERSION__, 
+        WEBPWASM_VERSION__,
         true);
     
     // enqueue js
@@ -341,16 +341,16 @@ function ww_init_resources() {
         $main_js_handle,
         plugin_dir_url(__FILE__) . "/main.js", 
         array("jquery", $webp_js_handle),
-        __WW_VERSION__, 
+        WEBPWASM_VERSION__,
         true);
 
     wp_localize_script(
         $main_js_handle,
-        "wwAjax", 
+        "webpwasmAjax",
         array(
             "url" => admin_url("admin-ajax.php"),
             "nonce" => wp_create_nonce(__NONCE_KEY__)
         ));
 
-    wp_enqueue_style(__WW_CSS_HANDLE__);
+    wp_enqueue_style(WEBPWASM_CSS_HANDLE__);
 }
