@@ -47,7 +47,7 @@ add_filter("the_content", "webpwasm_render_post", 9999);
 
 const WEBPWASM_VERSION__ = "1.0";
 const WEBPWASM_CSS_HANDLE__ = "webpwasm_css";
-const __NONCE_KEY__ = "webpwasm_nonce";
+const WEBPWASM_NONCE_KEY__ = "webpwasm_nonce";
 
 function webpwasm_admin_menu() {
     add_management_page(
@@ -177,11 +177,11 @@ function webpwasm_is_valid_post_id($post_id) {
 function webpwasm_webp_fetch_images() {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $data = isset( $_POST ) ? $_POST : array();
-        if (!isset($data[__NONCE_KEY__])
+        if (!isset($data[WEBPWASM_NONCE_KEY__])
             || !isset($data["overwrite"])
             || !isset($data["post_id"])
             || !webpwasm_is_valid_post_id($data["post_id"])
-            || !wp_verify_nonce($data[__NONCE_KEY__], __NONCE_KEY__)) {
+            || !wp_verify_nonce($data[WEBPWASM_NONCE_KEY__], WEBPWASM_NONCE_KEY__)) {
             http_response_code(400);
         } else {
             $posts = webpwasm_webp_all_media((int) $data["post_id"]);
@@ -217,10 +217,10 @@ function webpwasm_webp_delete_all() {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $data = isset( $_POST ) ? $_POST : array();
     
-        if (!isset($data[__NONCE_KEY__]) 
+        if (!isset($data[WEBPWASM_NONCE_KEY__])
             || !isset($data["post_id"])
             || !webpwasm_is_valid_post_id($data["post_id"])
-            || !wp_verify_nonce($data[__NONCE_KEY__], __NONCE_KEY__)) {
+            || !wp_verify_nonce($data[WEBPWASM_NONCE_KEY__], WEBPWASM_NONCE_KEY__)) {
             http_response_code(400);
         } else {
             $results = array();
@@ -273,8 +273,8 @@ function webpwasm_webp_upload() {
         if (!isset($data["post_id"])
             || !isset($data["webp"]) 
             || !isset($data["src"])
-            || !isset($data[__NONCE_KEY__])
-            || !wp_verify_nonce($data[__NONCE_KEY__], __NONCE_KEY__)) {
+            || !isset($data[WEBPWASM_NONCE_KEY__])
+            || !wp_verify_nonce($data[WEBPWASM_NONCE_KEY__], WEBPWASM_NONCE_KEY__)) {
             http_response_code(400);
         } else {
             $post = get_post($data["post_id"]);
@@ -349,7 +349,7 @@ function webpwasm_init_resources() {
         "webpwasmAjax",
         array(
             "url" => admin_url("admin-ajax.php"),
-            "nonce" => wp_create_nonce(__NONCE_KEY__)
+            "nonce" => wp_create_nonce(WEBPWASM_NONCE_KEY__)
         ));
 
     wp_enqueue_style(WEBPWASM_CSS_HANDLE__);
