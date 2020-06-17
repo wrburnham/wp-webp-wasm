@@ -91,7 +91,7 @@ function webpwasm_render_post($content) {
 }
 
 function webpwasm_webp_src($src) {
-    $webp_path = get_webp_image_file_path($src);
+    $webp_path = webpwasm_get_webp_image_file_path($src);
     if (file_exists($webp_path)) {
         $src = webpwasm_get_webp_name($src);
     }
@@ -100,7 +100,7 @@ function webpwasm_webp_src($src) {
 
 function webpwasm_webp_srcset($srcset) {
     foreach (webpwasm_get_srcset_images($srcset) as $src) {
-        $ss_webp_path = get_webp_image_file_path($src);
+        $ss_webp_path = webpwasm_get_webp_image_file_path($src);
         if (file_exists($ss_webp_path)) {
             $srcset = str_replace($src, webpwasm_get_webp_name($src), $srcset);
         }
@@ -128,7 +128,7 @@ function webpwasm_get_srcset_url($raw) {
 /**
  * Given a url, find the resource on the server
  */
-function get_webp_image_file_path($src) {
+function webpwasm_get_webp_image_file_path($src) {
     $dir = wp_get_upload_dir();
     $site_url = parse_url($dir['url']);
     $image_path = parse_url($src);
