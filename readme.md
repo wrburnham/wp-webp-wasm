@@ -45,7 +45,6 @@ Conversion is done on the client, so a modern browser with wasm support is neede
 
 This plugin is licensed as GPLv3.
 
-### Licenso notes
+### License notes
 
-The simple html dom parser library is used to render webp images directly in WordPress content where possible. This library, distributed in the plugin code, is licensed under the MIT license.
-The client-side conversion to WebP leverages Google's libwebp. Please see the main.php header for details specific to these two pieces of software that are integrated in this plugin.
+The simple html dom parser library is used to render webp images directly in WordPress content where possible. The client-side conversion to WebP leverages Google's libwebp.
